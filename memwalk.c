@@ -54,7 +54,7 @@ unsigned long walk_mem(unsigned char *mem, unsigned long sz_mem,
 			break;
 	}
 
-	return sum / runtime;
+	return sum;
 }
 
 int main(int argc, char *argv[])
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 	pthread_create(&end_notifier, NULL, end_notice, &runtime);
 
 	printf("%'lu accesses per second\n",
-			walk_mem(mem, sz_mem, stride));
+			walk_mem(mem, sz_mem, stride) / runtime);
 
 	pthread_join(end_notifier, NULL);
 
