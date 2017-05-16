@@ -42,7 +42,9 @@ void *end_notice(void *none)
 	return NULL;
 }
 
-void walk_mem(void)
+/* mem should be initalized to have value 1 in each byte */
+unsigned long walk_mem(unsigned char *mem, unsigned long sz_mem,
+			unsigned long stride)
 {
 	unsigned long sum = 0;
 	unsigned long i, j = 0;
@@ -56,7 +58,7 @@ void walk_mem(void)
 			break;
 	}
 
-	fprintf(stdout, "%'lu accesses per second\n", sum / runtime);
+	return sum / runtime;
 }
 
 int main(int argc, char *argv[])
@@ -82,7 +84,8 @@ int main(int argc, char *argv[])
 
 	pthread_create(&end_notifier, NULL, end_notice, NULL);
 
-	walk_mem();
+	fprintf(stdout, "%'lu accesses per second\n",
+			walk_mem(mem, sz_mem, stride));
 
 	pthread_join(end_notifier, NULL);
 
