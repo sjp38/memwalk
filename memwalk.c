@@ -26,7 +26,7 @@ unsigned char *mem;
 char finish;
 unsigned long progress;
 
-void warmup(void)
+void init_mem(unsigned char *mem, unsigned long sz_mem)
 {
 	unsigned long i = 0;
 
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 			sz_mem, stride, runtime);
 
 	mem = (unsigned char *)malloc(sz_mem * sizeof(char));
-	warmup();
+	init_mem(mem, sz_mem);
 
 	pthread_create(&end_notifier, NULL, end_notice, NULL);
 
