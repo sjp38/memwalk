@@ -18,11 +18,8 @@
 	x;		\
 	x;
 
-unsigned long sz_mem;
-unsigned long stride;
 unsigned long runtime;
 
-unsigned char *mem;
 char finish;
 
 void init_mem(unsigned char *mem, unsigned long sz_mem)
@@ -62,6 +59,10 @@ unsigned long walk_mem(unsigned char *mem, unsigned long sz_mem,
 
 int main(int argc, char *argv[])
 {
+	unsigned char *mem;
+	unsigned long sz_mem;
+	unsigned long stride;
+
 	pthread_t end_notifier;
 
 	if (argc < 3) {
