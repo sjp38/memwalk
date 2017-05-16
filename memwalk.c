@@ -30,9 +30,9 @@ void init_mem(unsigned char *mem, unsigned long sz_mem)
 		ACCESS_ONCE(mem[i]) = 1;
 }
 
-void *end_notice(void *none)
+void *end_notice(void *runtime)
 {
-	usleep(runtime * 1000 * 1000);
+	usleep(*(unsigned long *)runtime * 1000 * 1000);
 	finish = 1;
 
 	return NULL;
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 	mem = (unsigned char *)malloc(sz_mem * sizeof(char));
 	init_mem(mem, sz_mem);
 
-	pthread_create(&end_notifier, NULL, end_notice, NULL);
+	pthread_create(&end_notifier, NULL, end_notice, &runtime);
 
 	printf("%'lu accesses per second\n",
 			walk_mem(mem, sz_mem, stride));
