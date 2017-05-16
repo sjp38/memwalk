@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
 	pthread_create(&end_notifier, NULL, end_notice, NULL);
 
-	fprintf(stdout, "%'lu accesses per second\n",
+	printf("%'lu accesses per second\n",
 			walk_mem(mem, sz_mem, stride));
 
 	pthread_join(end_notifier, NULL);
