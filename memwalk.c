@@ -24,7 +24,6 @@ unsigned long runtime;
 
 unsigned char *mem;
 char finish;
-unsigned long progress;
 
 void init_mem(unsigned char *mem, unsigned long sz_mem)
 {
