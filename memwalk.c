@@ -43,13 +43,17 @@ unsigned long walk_mem(unsigned char *mem, unsigned long sz_mem,
 {
 	unsigned long sum = 0;
 	unsigned long i, j = 0;
+	unsigned long suff_cycle;
+
+	/* check ending signal once for loughly one billion memory accesses */
+	suff_cycle = 1000 * 1000 * 1000 / (sz_mem / stride);
 
 	while (1) {
 		for (i = 0; i < sz_mem / stride - 10;) {
 			TEN_TIMES(sum += ACCESS_ONCE(mem[i++ * stride]));
 		}
 
-		if (j++ % 100 == 0 && ACCESS_ONCE(finish))
+		if (j++ % suff_cycle == 0 && ACCESS_ONCE(finish))
 			break;
 	}
 
