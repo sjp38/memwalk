@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 
 	pthread_t end_notifier;
 
-	if (argc < 3) {
+	if (argc < 4) {
 		fprintf(stderr, "Usage: %s <memory size> <stride> <runtime>\n",
 				argv[0]);
 		exit(1);
