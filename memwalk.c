@@ -2,6 +2,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 #include <unistd.h>
 
 #define ACCESS_ONCE(x) (*(volatile typeof(x) *)&(x))
@@ -62,6 +63,9 @@ int main(int argc, char *argv[])
 	unsigned long stride;
 	unsigned long runtime;
 
+	unsigned long nr_accesses;
+	struct timeval start, end;
+
 	pthread_t end_notifier;
 
 	if (argc < 4) {
@@ -81,10 +85,22 @@ int main(int argc, char *argv[])
 	mem = (unsigned char *)malloc(sz_mem * sizeof(char));
 	init_mem(mem, sz_mem);
 
+	if (gettimeofday(&start, NULL) != 0) {
+		fprintf(stderr, "Failed to get start time\n");
+		return -1;
+	}
+
 	pthread_create(&end_notifier, NULL, end_notice, &runtime);
 
+	nr_accesses = walk_mem(mem, sz_mem, stride);
+
+	if (gettimeofday(&end, NULL) != 0) {
+		fprintf(stderr, "Failed to get end time\n");
+		return -1;
+	}
+
 	printf("%'lu accesses per second\n",
-			walk_mem(mem, sz_mem, stride) / runtime);
+			nr_accesses / (end.tv_sec - start.tv_sec));
 
 	pthread_join(end_notifier, NULL);
 
