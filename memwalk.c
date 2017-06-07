@@ -86,8 +86,20 @@ int main(int argc, char *argv[])
 	printf("Walk %'lu bytes array with %'lu bytes stride for %lu seconds\n",
 			sz_mem, stride, runtime);
 
+	if (gettimeofday(&start, NULL) != 0) {
+		fprintf(stderr, "Failed to get init start time\n");
+		return -1;
+	}
 	mem = (unsigned char *)malloc(sz_mem * sizeof(char));
 	init_mem(mem, sz_mem);
+	if (gettimeofday(&end, NULL) != 0) {
+		fprintf(stderr, "Failed to get init end time\n");
+		return -1;
+	}
+
+	printf("%'lu usecs for initalization\n",
+			(end.tv_sec - start.tv_sec) * 1000000 +
+			(end.tv_usec - start.tv_usec));
 
 	if (gettimeofday(&start, NULL) != 0) {
 		fprintf(stderr, "Failed to get start time\n");
