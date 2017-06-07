@@ -115,8 +115,9 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	printf("%'lu accesses per second\n",
-			nr_accesses / (end.tv_sec - start.tv_sec));
+	printf("%'lu accesses per second, %'lu sec accesses\n",
+			nr_accesses / (end.tv_sec - start.tv_sec),
+			end.tv_sec - start.tv_sec);
 
 	pthread_join(end_notifier, NULL);
 
