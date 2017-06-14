@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USAGE="$0 memsizes..."
+USAGE="$0 <memsizes...>"
 
 for mem in "$@"
 do
