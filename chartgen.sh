@@ -4,24 +4,26 @@ LBOX=/home/$USER/lazybox
 
 DATFILE="./out/profile_rawdat"
 
-SZ_MEMS_LST=(`grep "Walk" $DATFILE | awk '{print $2}'`)
+SZ_MEMS=`grep "Walk" $DATFILE | awk '{print $2}'`
 
-APS=(`grep "accesses per second" ./out/profile_rawdat | awk '{print $1}'`)
+function plot() {
+	TITLE=$1
+	OUT="$TITLE\n"
 
-OUT="aps\n"
-for IDX in ${!SZ_MEMS_LST[@]}
-do
-	OUT+="${SZ_MEMS_LST[$IDX]} ${APS[$IDX]}\n"
-done
+	SLIST=($2)
+	VALS=($3)
 
-echo -e $OUT | sed 's/,//g' | $LBOX/gnuplot/plot_stdin.sh
-mv plot.pdf out/aps.pdf
+	for IDX in ${!SLIST[@]}
+	do
+		OUT+="${SLIST[$IDX]} ${VALS[$IDX]}\n"
+	done
+	echo -e $OUT
+	echo -e $OUT | sed 's/,//g' | $LBOX/gnuplot/plot_stdin.sh
+	mv plot.pdf out/$TITLE.pdf
+}
 
-IPCS=(`grep "insn per cycle" $DATFILE | awk '{print $4}'`)
-OUT="ips\n"
-for IDX in ${!SZ_MEMS_LST[@]}
-do
-	OUT+="${SZ_MEMS_LST[$IDX]} ${IPCS[$IDX]}\n"
-done
-echo -e $OUT | sed 's/,//g' | $LBOX/gnuplot/plot_stdin.sh
-mv plot.pdf out/ips.pdf
+APS=`grep "accesses per second" ./out/profile_rawdat | awk '{print $1}'`
+plot "aps" "$SZ_MEMS" "$APS"
+
+IPCS=`grep "insn per cycle" $DATFILE | awk '{print $4}'`
+plot "ipc" "$SZ_MEMS" "$IPCS"
