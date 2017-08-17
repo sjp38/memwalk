@@ -27,3 +27,15 @@ plot "aps" "$SZ_MEMS" "$APS"
 
 IPCS=`grep "insn per cycle" $DATFILE | awk '{print $4}'`
 plot "ipc" "$SZ_MEMS" "$IPCS"
+
+L1LOADS=`grep "L1-dcache-loads" $DATFILE | awk '{print $4}'`
+plot "l1-dcache-loads" "$SZ_MEMS" "$L1LOADS"
+
+L1MISSES=`grep "L1-dcache-load-misses" $DATFILE | awk '{print $4}'`
+plot "l1-dcache-load-misses" "$SZ_MEMS" "$L1MISSES"
+
+LLCLOADS=`grep "LLC-loads" $DATFILE | awk '{print $4}'`
+plot "LLC-loads" "$SZ_MEMS" "$LLCLOADS"
+
+LLCMISSES=`grep "LLC-load-misses" $DATFILE | awk '{print $4}'`
+plot "LLC-load-misses" "$SZ_MEMS" "$LLCMISSES"
