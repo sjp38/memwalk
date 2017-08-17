@@ -26,8 +26,10 @@ APS=`grep "accesses per second" ./out/profile_rawdat | awk '{print $1}'`
 plot "aps" "$SZ_MEMS" "$APS"
 
 
-TITLES=("ipc" "l1-dcache-loads" "l1-dcache-load-misses" "LLC-loads" "LLC-load-misses")
-KEYWORDS=("insn per cycle" "L1-dcache-loads" "L1-dcache-load-misses" "LLC-loads" "LLC-load-misses")
+TITLES=("ipc" "l1-dcache-loads" "l1-dcache-load-misses"
+	"LLC-loads" "LLC-load-misses")
+KEYWORDS=("insn per cycle" "L1-dcache-loads" "L1-dcache-load-misses"
+	"LLC-loads" "LLC-load-misses")
 for IDX in ${!TITLES[@]}
 do
 	VALUES=`grep "${KEYWORDS[$IDX]}" $DATFILE | awk '{print $4}'`
