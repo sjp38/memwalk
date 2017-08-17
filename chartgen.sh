@@ -25,17 +25,12 @@ function plot() {
 APS=`grep "accesses per second" ./out/profile_rawdat | awk '{print $1}'`
 plot "aps" "$SZ_MEMS" "$APS"
 
-IPCS=`grep "insn per cycle" $DATFILE | awk '{print $4}'`
-plot "ipc" "$SZ_MEMS" "$IPCS"
 
-L1LOADS=`grep "L1-dcache-loads" $DATFILE | awk '{print $4}'`
-plot "l1-dcache-loads" "$SZ_MEMS" "$L1LOADS"
-
-L1MISSES=`grep "L1-dcache-load-misses" $DATFILE | awk '{print $4}'`
-plot "l1-dcache-load-misses" "$SZ_MEMS" "$L1MISSES"
-
-LLCLOADS=`grep "LLC-loads" $DATFILE | awk '{print $4}'`
-plot "LLC-loads" "$SZ_MEMS" "$LLCLOADS"
-
-LLCMISSES=`grep "LLC-load-misses" $DATFILE | awk '{print $4}'`
-plot "LLC-load-misses" "$SZ_MEMS" "$LLCMISSES"
+TITLES=("ipc" "l1-dcache-loads" "l1-dcache-load-misses" "LLC-loads" "LLC-load-misses")
+KEYWORDS=("insn per cycle" "L1-dcache-loads" "L1-dcache-load-misses" "LLC-loads" "LLC-load-misses")
+for IDX in ${!TITLES[@]}
+do
+	VALUES=`grep "${KEYWORDS[$IDX]}" $DATFILE | awk '{print $4}'`
+	echo $VALUES
+	plot "${TITLES[$IDX]}" "$SZ_MEMS" "$VALUES"
+done
