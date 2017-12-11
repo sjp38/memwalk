@@ -106,6 +106,11 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+	if (runtime <= 0) {
+		printf("0 accesses per second, %'lu sec accesses\n", runtime);
+		return 0;
+	}
+
 	pthread_create(&end_notifier, NULL, end_notice, &runtime);
 
 	nr_accesses = walk_mem(mem, sz_mem, stride);
