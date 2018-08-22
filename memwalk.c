@@ -1,6 +1,7 @@
 #include <locale.h>
 #include <pthread.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -66,6 +67,7 @@ int main(int argc, char *argv[])
 	unsigned long sz_mem;
 	unsigned long stride;
 	unsigned long runtime;
+	char quiet = 0;
 
 	unsigned long nr_accesses;
 	struct timeval start, end;
@@ -77,14 +79,18 @@ int main(int argc, char *argv[])
 				argv[0]);
 		exit(1);
 	}
+
+	if (argc > 4 && strcmp(argv[4], "-q") == 0)
+		quiet = 1;
 	setlocale(LC_NUMERIC, "");
 
 	sz_mem = atol(argv[1]);
 	stride = atol(argv[2]);
 	runtime = atol(argv[3]);
 
-	printf("Walk %'lu bytes array with %'lu bytes stride for %lu seconds\n",
-			sz_mem, stride, runtime);
+	if (!quiet)
+		printf("Walk %'lu bytes array with %'lu bytes stride for %lu seconds\n",
+				sz_mem, stride, runtime);
 
 	if (gettimeofday(&start, NULL) != 0) {
 		fprintf(stderr, "Failed to get init start time\n");
@@ -97,9 +103,10 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	printf("%'lu usecs for initalization\n",
-			(end.tv_sec - start.tv_sec) * 1000000 +
-			(end.tv_usec - start.tv_usec));
+	if (!quiet)
+		printf("%'lu usecs for initalization\n",
+				(end.tv_sec - start.tv_sec) * 1000000 +
+				(end.tv_usec - start.tv_usec));
 
 	if (gettimeofday(&start, NULL) != 0) {
 		fprintf(stderr, "Failed to get start time\n");
@@ -107,7 +114,9 @@ int main(int argc, char *argv[])
 	}
 
 	if (runtime <= 0) {
-		printf("0 accesses per second, %'lu sec accesses\n", runtime);
+		if (!quiet)
+			printf("0 accesses per second, %'lu sec accesses\n",
+					runtime);
 		return 0;
 	}
 
@@ -120,9 +129,10 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	printf("%'lu accesses per second, %'lu sec accesses\n",
-			nr_accesses / (end.tv_sec - start.tv_sec),
-			end.tv_sec - start.tv_sec);
+	if (!quiet)
+		printf("%'lu accesses per second, %'lu sec accesses\n",
+				nr_accesses / (end.tv_sec - start.tv_sec),
+				end.tv_sec - start.tv_sec);
 
 	pthread_join(end_notifier, NULL);
 
