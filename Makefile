@@ -5,7 +5,7 @@ APP	+= memwalk
 IDIR	:= include
 CC	:= gcc
 CFLAGS	:= -g -I$(IDIR) -O3 -Wall -Werror -std=gnu99
-LIBS	:= -lpthread -lnuma -ljemalloc
+LIBS	:= -lpthread
 ODIR	:= ./
 
 _OBJ	:= memwalk.o
